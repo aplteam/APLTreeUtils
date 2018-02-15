@@ -1,0 +1,43 @@
+ R←Test_004(stopFlag batchFlag);fn;html;⎕TRAP;answer;browser;rideFlag
+⍝ Exercise "GoToWebPage"
+ R←∆Failed
+ ⎕TRAP←(999 'C' '. ⍝ Deliberate error')(0 'N')
+
+ :If batchFlag
+     R←∆NoBatchTest
+ :Else
+     rideFlag←3501⌶⍬
+     browser←(1+rideFlag)⊃'your default browser?' 'the RIDE browser?'
+     :If ~rideFlag
+         ⍞←'Please open a new (=empty) window of your default browser now, then press <enter> '
+         {}⍞
+     :EndIf
+
+     #.APLTreeUtils.GoToWebPage'aplwiki.com'
+     :If 0=∆Ask'Do you see http://aplwiki.com in ',browser
+         :Return
+     :EndIf
+     #.APLTreeUtils.GoToWebPage'httpS://www.linkedin.com/in/kaijaeger'
+     :If 0=∆Ask'Do you see httpS://www.linkedin.com/in/kaijaeger in ',browser
+         :Return
+     :EndIf
+     fn←(¯4↓#.FilesAndDirs.GetTempFilename''),'.html'
+     html←'<h1>Homemade</h1><p>This page was created on the fly...</p>'
+     #.APLTreeUtils.WriteUtf8File fn html
+     #.APLTreeUtils.GoToWebPage'file://',(('Win'≡#.APLTreeUtils.GetOperatingSystem ⍬)/'localhost/'),fn
+     :If 0=∆Ask'Do you see ',fn,' in ',browser
+         :Return
+     :EndIf
+     ⎕DL 0.2
+     #.FilesAndDirs.DeleteFile fn
+
+     :If 'Mac'≡#.APLTreeUtils.GetOperatingSystem ⍬
+         'Safari'#.APLTreeUtils.GoToWebPage'aplwiki.com'
+         :If 0=∆Ask'Do you see http://aplwiki.com in Safari'
+             :Return
+         :EndIf
+     :EndIf
+
+     R←∆OK
+
+ :EndIf

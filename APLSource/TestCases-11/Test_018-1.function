@@ -1,0 +1,27 @@
+ R←Test_018(stopFlag batchFlag);A;IOs;MLs;Foo;⎕TRAP
+⍝ Exercise "Where"
+ R←∆Failed
+ ⎕TRAP←(999 'C' '. ⍝ Deliberate error')(0 'N')
+
+ A←#.APLTreeUtils
+ IOs←0 1
+ MLs←0 1 2 3
+
+ :For ⎕IO :In IOs
+     :For ⎕ML :In MLs
+
+         →FailsIf ⍬≢A.Where ⍬
+         →FailsIf(,⍳1)≢A.Where 1
+         →FailsIf ⍬≢A.Where 0
+         →FailsIf(⍳3)≢A.Where 1 1 1
+         →FailsIf(1 0 1/⍳3)≢A.Where 1 0 1
+         →FailsIf ⍬≢A.Where 0 0 0
+
+         ⎕FIX':Class Foo' ':Include #.APLTreeUtils'('⎕IO←',⍕~⎕IO)'∇r←where y' ':Access Public Shared' 'r←Where y' '∇' ':EndClass'
+         →FailsIf({⎕IO←⍵ ⋄ 1 0 1/⍳3}~⎕IO)≢Foo.where 1 0 1
+
+     :EndFor
+ :EndFor
+
+
+ R←∆OK

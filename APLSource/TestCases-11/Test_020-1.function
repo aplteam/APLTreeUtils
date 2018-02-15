@@ -1,0 +1,26 @@
+ R←Test_020(stopFlag batchFlag);A;IOs;MLs;⎕TRAP;Mix
+⍝ Exercise "dlb"
+ R←∆Failed
+ ⎕TRAP←(999 'C' '. ⍝ Deliberate error')(0 'N')
+
+ A←#.APLTreeUtils
+ Mix←{⎕ML←1 ⋄ ↑⍵}
+ IOs←0 1
+ MLs←0 1 2 3
+
+ :For ⎕IO :In IOs
+     :For ⎕ML :In MLs
+
+         →FailsIf~0∊⍴A.dlb' '
+         →FailsIf''≢A.dlb''
+         →FailsIf'A'≢A.dlb'A'
+         →FailsIf'APL'≢A.dlb'APL'
+         →FailsIf'APL  is great    '≢A.dlb' APL  is great    '
+         →FailsIf'APL' 'APL   is great '≢A.dlb'APL' '   APL   is great '
+         →FailsIf(Mix'APL' 'APL   is great    ')≢A.dlb Mix'APL' '   APL   is great '
+
+     :EndFor
+ :EndFor
+
+
+ R←∆OK

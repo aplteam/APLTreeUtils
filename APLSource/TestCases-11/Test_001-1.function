@@ -1,0 +1,54 @@
+ R←Test_001(stopFlag batchFlag);A;io;⎕IO;ml;⎕ML;buffer;⎕TRAP
+⍝ Exercise SplitPath
+ ⎕TRAP←(999 'C' '. ⍝ Deliberate error')(0 'N')
+ A←#.APLTreeUtils
+ R←∆Failed
+
+ :For io :In 0 1
+     ⎕IO←io
+     :For ml :In 0 1 2 3
+         ⎕ML←ml
+
+         →FailsIf('' '')≢buffer←A.SplitPath''
+         →FailsIf(⍬ ⍬)≢buffer←A.SplitPath ⍬
+         →FailsIf(,¨(1 2)3)≢buffer←2 A.SplitPath 1 2 3
+         →FailsIf('' 'filename.exension')≢buffer←A.SplitPath'filename.exension'
+         →FailsIf('c:/Path/' '')≢buffer←A.SplitPath'c:/Path/'
+         →FailsIf('c:/Path/' 'filename.extension')≢buffer←A.SplitPath'c:/Path/filename.extension'
+         →FailsIf('level 1-level 2-third level-' 'final')≢buffer←'-'A.SplitPath'level 1-level 2-third level-final'
+
+         →FailsIf''≢buffer←A.dmb''
+         →FailsIf''≢buffer←A.dmb ⍬
+         →FailsIf''≢buffer←A.dmb' '
+         →FailsIf''≢buffer←A.dmb'  '
+         →FailsIf''≢buffer←A.dmb'   '
+         →FailsIf'a'≢buffer←A.dmb'a'
+         →FailsIf(,'a')≢buffer←A.dmb,'a '
+         →FailsIf(,'a')≢buffer←A.dmb,' a'
+         →FailsIf(,'a')≢buffer←A.dmb,' a '
+         →FailsIf(,'a')≢buffer←A.dmb,' a  '
+         →FailsIf(,'a')≢buffer←A.dmb,'  a  '
+         →FailsIf('a b')≢buffer←A.dmb,'a b'
+         →FailsIf('a b')≢buffer←A.dmb,'a b '
+         →FailsIf('a b')≢buffer←A.dmb,' a b'
+         →FailsIf('a b')≢buffer←A.dmb,'  a b '
+         →FailsIf('a b')≢buffer←A.dmb,'  a b  '
+         →FailsIf('a b')≢buffer←A.dmb,'  a  b  '
+         →FailsIf('a b')≢buffer←A.dmb,'  a    b  '
+         →FailsIf('')≢buffer←'-'A.dmb'-'
+         →FailsIf('')≢buffer←'-'A.dmb,'-'
+         →FailsIf('')≢buffer←'-'A.dmb'--'
+         →FailsIf('')≢buffer←'-'A.dmb'---'
+         →FailsIf('a b')≢buffer←'-'A.dmb,'a b'
+         →FailsIf('a- b')≢buffer←'-'A.dmb,'a- b'
+         →FailsIf('a- b')≢buffer←'-'A.dmb,'a-- b'
+         →FailsIf('a- b')≢buffer←'-'A.dmb,'a-- b-'
+         →FailsIf('a- b')≢buffer←'-'A.dmb,'-a-- b-'
+         →FailsIf('a- b')≢buffer←'-'A.dmb,'-a-- b--'
+         →FailsIf('a- b')≢buffer←'-'A.dmb,'--a-- b--'
+         →FailsIf('a- b')≢buffer←'-'A.dmb,'-a----- b-'
+
+     :EndFor
+ :EndFor
+
+ R←∆OK

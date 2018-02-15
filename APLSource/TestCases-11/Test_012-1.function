@@ -1,0 +1,124 @@
+ R←Test_012(stopFlag batchFlag);A;code;io;⎕IO;ml;⎕ML;its;local;MyTest;flag;Testspace;ref;myLogger;instance;obstacle;⎕TRAP;home;fn
+⍝ Exercise "FindPathTo".
+⍝ This occasionally fails, apparently due to a timing issue. Just run it again and it will be fine.
+ A←#.APLTreeUtils
+ R←∆Failed
+ ⎕TRAP←(999 'C' '. ⍝ Deliberate error')(0 'N')
+ home←GetTestFilesHome
+ ⎕EX'Testspace'
+ #.⎕EX'Test_012'
+ code←,¨':Class MyTest' ':Include #.APLTreeUtils' '∇r←Get what' ':Access Public Shared' 'r←FindPathTo what' '∇' ':EndClass ⍝ MyTest'
+ obstacle←':Class Obstacle' ':EndClass'
+ #.⎕SHADOW'Test_012'
+ 'Test_012'#.⎕NS''
+ 'Test2'#.Test_012.⎕NS''
+
+ :For io :In 0 1
+     ⎕IO←io
+     :For ml :In 0 1 2 3
+         #.⎕FIX obstacle
+         ⎕EX'Testspace'
+         'Testspace'⎕NS''
+         ⎕CS'Testspace'
+
+     ⍝ Test A)
+     ⍝ Find Obstacle in # because it's not anywhere else
+         ⎕ML←ml
+         ⎕FIX code
+         its←,⍕MyTest.Get'Obstacle'
+         flag←its≢,'#'
+         →∆TidyUp ##.GoToTidyUp flag
+         ⎕EX'Mytest'
+
+     ⍝ Test B)
+     ⍝ "Obstacle" is still in #, but it is also in local now
+     ⍝ (as is "MyTest") and should therefore be found there.
+         ⎕EX'local'
+         'local'⎕NS''
+         ⎕CS local
+         ⎕FIX obstacle
+         ⎕FIX code
+         its←⍕MyTest.Get'Obstacle'
+         flag←its≢⍕⎕THIS
+         :If flag
+             :If 0<⎕NC'stopFlag'
+             :AndIf stopFlag
+                 . ⍝ Something went wrong
+             :EndIf
+             :Leave
+         :EndIf
+         ⎕CS ##  ⍝ Back to "Testspace'
+
+     ⍝ Test C)
+     ⍝ We now instanciate MyTest somewhere else, but Obstacle
+     ⍝ should be found where the instance stems from (local):
+         instance←⎕NEW local.Obstacle
+         its←⍕⎕THIS.MyTest.Get instance
+         ⎕CS #._APLTreeUtils.TestCases
+         flag←its≢(⍕⎕THIS),'.Testspace.local'
+         :If flag
+             :If 0<⎕NC'stopFlag'
+             :AndIf stopFlag
+                 . ⍝ Something went wrong
+             :EndIf
+             :Leave
+         :EndIf
+
+     ⍝ Test D)
+     ⍝ We now delete "Obstacle" from local but fix it in TestCase.
+     ⍝ Then we call Testspace.local.MyTest from  TestCases, so
+     ⍝ it should be found in TestCase
+         Testspace.local.⎕EX'Obstacle'
+         ⎕FIX ⎕SRC #.Obstacle
+         #.⎕EX'Obstacle'
+         its←⍕⎕THIS.Testspace.MyTest.Get'Obstacle'
+         flag←its≢⍕⎕THIS
+         :If flag
+             :If 0<⎕NC'stopFlag'
+             :AndIf stopFlag
+                 . ⍝ Something went wrong
+             :EndIf
+             :Leave
+         :EndIf
+         ⎕EX'Obstacle'
+
+     :EndFor
+ :EndFor
+
+⍝ Unnamed namespaces
+ ref←⎕NS''
+ ref.⎕FIX ⎕SRC #.APLTreeUtils
+ ref.⎕FIX ⎕SRC #.FilesAndDirs
+ ref.⎕FIX ⎕SRC #.Logger
+
+ :If 0=⎕NEXISTS home,'Logs'
+     'Create!'#.FilesAndDirs.CheckPath home,'Logs'
+ :EndIf
+
+ ⎕EX'#.SSO'
+ #.⎕SHADOW'SSO'
+ ref←⍎'#.SSO'⎕NS''
+ ref.⎕FIX ⎕SRC #.APLTreeUtils
+ ref.⎕FIX ⎕SRC #.FilesAndDirs
+ ref.⎕FIX ⎕SRC #.Logger
+ 'Source'ref.⎕NS''
+ ref.Source.⎕FX'r←Foo home' 'myLogger←⎕NEW ##.Logger (,⊂home)' ' r←myLogger.(path ,filename)'
+ fn←ref.Source.Foo home
+
+ :Trap 0
+     myLogger←⎕NEW ref.Logger(,⊂home,'Logs') ⍝ #.Logger will use FindPathTo in order to find FilesAndDirs!
+     R←∆OK
+ :Else
+     →GoToTidyUp 1
+ :EndTrap
+ ⎕DL 1
+ :Trap 0
+     myLogger.Close
+ :EndTrap
+
+∆TidyUp:
+ {}#.FilesAndDirs.RmDir home,'Logs'
+ :Trap 0 ⋄ ref.⎕EX'Source' ⋄ :EndTrap
+ :Trap 0 ⋄ #.FilesAndDirs.DeleteFile fn ⋄ :EndTrap
+
+⍝Done

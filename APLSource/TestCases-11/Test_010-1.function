@@ -1,0 +1,39 @@
+ R←Test_010(stopFlag batchFlag);A;newline;io;⎕IO;ml;⎕ML;buffer;⎕TRAP
+⍝ Exercise "Split"
+ A←#.APLTreeUtils
+ newline←⎕UCS 13 10
+ R←∆Failed
+ ⎕TRAP←(999 'C' '. ⍝ Deliberate error')(0 'N')
+
+ :For io :In 0 1
+     ⎕IO←io
+     :For ml :In 0 1 2 3
+         ⎕ML←ml
+
+         →FailsIf(,⊂'')≢buffer←A.Split''
+         →FailsIf(,⊂'')≢buffer←A.Split ⍬
+         →FailsIf(,⊂'One line')≢buffer←A.Split'One line'
+         →FailsIf('first line' 'the second line')≢buffer←A.Split'first line',newline,'the second line'
+         →FailsIf('first line' 'the second line' '' '')≢buffer←A.Split'first line',newline,'the second line',newline,newline
+         →FailsIf('first line' '' '' 'the second line')≢buffer←A.Split'first line',newline,newline,newline,'the second line'
+         →FailsIf('' '' '' '')≢buffer←A.Split newline,newline,newline
+         →FailsIf('' '')≢buffer←A.Split newline
+         →FailsIf(,⊂,'a')≢buffer←A.Split'a'
+         →FailsIf(,¨'ab')≢buffer←A.Split'a',newline,'b'
+         →FailsIf('first line' 'the second line')≢buffer←'<*>'A.Split'first line<*>the second line'
+         →FailsIf('first line' 'the second line' '' '')≢buffer←'<*>'A.Split'first line<*>the second line<*><*>'
+         →FailsIf('first line' '' '' 'the second line')≢buffer←'<*>'A.Split'first line<*><*><*>the second line'
+         →FailsIf('' '' '' '')≢buffer←'<*>'A.Split'<*><*><*>'
+         →FailsIf('' '')≢buffer←'<*>'A.Split'<*>'
+         →FailsIf(,¨'ab')≢buffer←'<*>'A.Split'a<*>b'
+         →FailsIf('first line' 'the second line')≢buffer←'#'A.Split'first line#the second line'
+         →FailsIf('first line' 'the second line' '' '')≢buffer←'#'A.Split'first line#the second line##'
+         →FailsIf('first line' '' '' 'the second line')≢buffer←'#'A.Split'first line###the second line'
+         →FailsIf('' '' '' '')≢buffer←'#'A.Split'###'
+         →FailsIf('' '')≢buffer←'#'A.Split'#'
+         →FailsIf(,¨'ab')≢buffer←'#'A.Split'a#b'
+
+     :EndFor
+ :EndFor
+
+ R←∆OK

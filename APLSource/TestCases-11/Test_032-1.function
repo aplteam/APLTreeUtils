@@ -1,0 +1,12 @@
+ R←Test_032(stopFlag batchFlag);A;⎕TRAP;body;First
+⍝ Checks whether the script carries an ":Access Public" statement anywhere; it shouldn't.
+ A←#.APLTreeUtils
+ R←∆Failed
+ ⎕TRAP←(999 'C' '. ⍝ Deliberate error')(0 'N')
+ First←{⎕ML←3 ⋄ ↑⍵}
+
+ body←⎕SRC #.APLTreeUtils
+ body←A.dlb body
+ body←('⍝'≠First¨body)⌿body
+ R←∨/':access public'∘{⍺≡(⍴⍺)↑⍵}¨A.Lowercase body
+ ⍝Done

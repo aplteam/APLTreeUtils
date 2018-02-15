@@ -1,0 +1,39 @@
+ R←Test_013(stopFlag batchFlag);A;filename;cs;io;⎕IO;ml;⎕ML;⎕TRAP;home;F;rc;cmd
+⍝ Try to read and write to a file that is exclusively tied by another app
+ (A F)←#.(APLTreeUtils FilesAndDirs)
+ R←∆Failed
+ ⎕TRAP←(999 'C' '. ⍝ Deliberate error')(0 'N')
+ home←GetTestFilesHome
+ filename←home,'tiedFile'
+
+ :If 'Win'≡#.APLTreeUtils.GetOperatingSystem ⍬
+     cs←#.Execute.DefaultParms
+     cs.wait←0
+     cmd←{⎕ML←1 ⋄ ⊃⍵}#.GetCommandLineArgs
+     cmd,←' ',F.PWD,'/Tests/tie.dws wspath="." sec=30 file="',filename,'"'  ⍝ This app ties the file exclusively
+     rc←cs #.Execute.Application cmd
+     ⎕DL 3  ⍝ Give it some time to tie the file
+
+     :For io :In 0 1
+         ⎕IO←io
+         :For ml :In 0 1 2 3
+             ⎕ML←ml
+             :Trap 19 22
+                 {}A.ReadUtf8File filename
+                 →FailsIf 1
+             :EndTrap
+         :EndFor
+     :EndFor
+     :For io :In 0 1
+         ⎕IO←io
+         :For ml :In 0 1 2 3
+             :Trap 19 22
+                 {}A.WriteUtf8File filename'abc'
+                 →FailsIf 1
+             :EndTrap
+         :EndFor
+     :EndFor
+     R←∆OK
+ :Else
+     R←∆WindowsOnly
+ :EndIf
