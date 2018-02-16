@@ -1,5 +1,11 @@
 # APLTreeUtils
 
+`APLTreeUtils` is a member of the APLTree library: a collection of classes etc. that aim to support the Dyalog APL programmer. 
+
+The members of the APLTree library solve many every-day problems any programmer might run into. All those members are tagged as "dyalog" and "apltree".
+
+## Overview
+
 Many classes and applications of the APLTree project `:Include` the namespace script `APLTreeUtils` or call functions in it.
 
 That means that before you can fix successfully one of these classes you must make sure that the namespace script `APLTreeUtils` is already in the current workspace.
