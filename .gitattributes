@@ -1,15 +1,9 @@
 # Auto detect text files and perform LF normalization
 * text=auto
 
-APLSource/ linguist-detectable=true
+APLSource/ linguist-detectable=false
 Dest/ linguist-detectable=false
 Make/ linguist-detectable=false
 Test/ linguist-detectable=false
 
-*.dyalog linguist-language=Dyalog APL
-*.dws linguist-language=Dyalog APL
-*.dyapp linguist-language=Dyalog APL
-*.class linguist-language=Dyalog APL
-*.function linguist-language=Dyalog APL
-*.operator linguist-language=Dyalog APL
-*.script linguist-language=Dyalog APL
+*.dyalog linguist-language=APL
