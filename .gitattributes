@@ -1,9 +1,3 @@
 # Auto detect text files and perform LF normalization
 * text=auto
 
-APLSource/ linguist-detectable=false
-Dest/ linguist-detectable=false
-Make/ linguist-detectable=false
-Test/ linguist-detectable=false
-
-*.dyalog linguist-language=APL
