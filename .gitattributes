@@ -2,6 +2,9 @@
 * text=auto
 
 APLSource/ linguist-detectable=true
+Dest/ linguist-detectable=false
+Make/ linguist-detectable=false
+Test/ linguist-detectable=false
 
 *.dyalog linguist-language=Dyalog APL
 *.dws linguist-language=Dyalog APL
