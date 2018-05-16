@@ -1,4 +1,4 @@
- R←Test_012(stopFlag batchFlag);A;code;io;⎕IO;ml;⎕ML;its;local;MyTest;flag;Testspace;ref;myLogger;instance;obstacle;⎕TRAP;home;fn
+ R←Test_012(stopFlag batchFlag);A;code;io;⎕IO;ml;⎕ML;its;local;MyTest;flag;Testspace;ref;myLogger;instance;obstacle;⎕TRAP;home;fn;ref2
 ⍝ Exercise "FindPathTo".
 ⍝ This occasionally fails, apparently due to a timing issue. Just run it again and it will be fine.
  A←#.APLTreeUtils
@@ -88,8 +88,10 @@
 ⍝ Unnamed namespaces
  ref←⎕NS''
  ref.⎕FIX ⎕SRC #.APLTreeUtils
- ref.⎕FIX ⎕SRC #.FilesAndDirs
- ref.⎕FIX ⎕SRC #.Logger
+ ref2←ref.⎕NS''
+ ref2.⎕FIX ⎕SRC #.FilesAndDirs
+ ref2←ref.⎕NS''
+ ref2.⎕FIX ⎕SRC #.Logger
 
  :If 0=⎕NEXISTS home,'Logs'
      'Create!'#.FilesAndDirs.CheckPath home,'Logs'
@@ -99,14 +101,16 @@
  #.⎕SHADOW'SSO'
  ref←⍎'#.SSO'⎕NS''
  ref.⎕FIX ⎕SRC #.APLTreeUtils
- ref.⎕FIX ⎕SRC #.FilesAndDirs
- ref.⎕FIX ⎕SRC #.Logger
+ ref2←ref.⎕NS''
+ ref2.⎕FIX ⎕SRC #.FilesAndDirs
+ ref2←⍎'qq'ref.⎕NS''
+ ref2.⎕FIX ⎕SRC #.Logger
  'Source'ref.⎕NS''
- ref.Source.⎕FX'r←Foo home' 'myLogger←⎕NEW ##.Logger (,⊂home)' ' r←myLogger.(path ,filename)'
+ ref.Source.⎕FX'r←Foo home' 'myLogger←⎕NEW ##.qq.Logger (,⊂home)' ' r←myLogger.(path ,filename)'
  fn←ref.Source.Foo home
 
  :Trap 0
-     myLogger←⎕NEW ref.Logger(,⊂home,'Logs') ⍝ #.Logger will use FindPathTo in order to find FilesAndDirs!
+     myLogger←⎕NEW ref2.Logger(,⊂home,'Logs') ⍝ #.Logger will use FindPathTo in order to find FilesAndDirs!
      R←∆OK
  :Else
      →GoToTidyUp 1

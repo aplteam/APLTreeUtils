@@ -1,5 +1,5 @@
 :Namespace APLTreeUtils
-⍝ *** Version 4.2.0 ⋄ 2018-02-14 ***
+⍝ *** Version 4.1.2 ⋄ 2018-05-16 ***
 ⍝
 ⍝ ## Overview
 ⍝ Version 4.0.0 is a major change in two respects:
@@ -30,8 +30,9 @@
 ⍝ * `WriteBytesAs8BitSignedIntegersToFile`
 ⍝
 ⍝ ## Version History
-⍝ * 4.2.?
-⍝   `GoToWebPage` was not clear about "file://" versus "file:///"
+⍝ * 4.1.2
+⍝   * `GoToWebPage` was not clear about "file://" versus "file:///"
+⍝   * `GoToWebPage` with "file://" or "file:///" did not work from Ride
 ⍝ * 4.1.1
 ⍝   * Very serious performance issue fixed in `WriteUtf8File` with "append".
 ⍝   Bug fixes:
@@ -320,8 +321,10 @@
       :If 3501⌶⍬ ⍝ Connected to Ride?
           :If 'file://'{⍺≡(⍴⍺)↑⍵}Url
               EncodeBlanksForNix←{0∊⍴w←⍵:w ⋄ 0=+/b←' '=w:w ⋄ (b/w)←⊂'\ ' ⋄ ↑,/w}
-              url←EncodeBlanksForNix url
-              html←ReadUtf8File'//'{⍵↓⍨1+1⍳⍨⍺⍷⍵}Url
+              Url←EncodeBlanksForNix Url
+              Url←(⍴'file:')↓Url
+              Url←{⍵↓⍨+/∧\'/'=⍵}Url
+              html←ReadUtf8File Url
               title←'<title'{{⍵↑⍨¯1+⍵⍳'<'}⍵↓⍨(⍴⍺)+1⍳⍨⍺⍷⍵}∊html
               title(3500⌶)∊html
           :Else

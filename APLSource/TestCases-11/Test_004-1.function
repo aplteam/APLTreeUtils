@@ -24,7 +24,7 @@
      fn←(¯4↓#.FilesAndDirs.GetTempFilename''),'.html'
      html←'<h1>Homemade</h1><p>This page was created on the fly...</p>'
      #.APLTreeUtils.WriteUtf8File fn html
-     #.APLTreeUtils.GoToWebPage'file://',(('Win'≡#.APLTreeUtils.GetOperatingSystem ⍬)/'localhost/'),fn
+     #.APLTreeUtils.GoToWebPage'file://',fn
      :If 0=∆Ask'Do you see ',fn,' in ',browser
          :Return
      :EndIf
