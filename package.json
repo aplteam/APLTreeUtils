@@ -1,0 +1,29 @@
+{
+  "name": "apltreeutils",
+  "version": "4.2.1",
+  "description": "General utilities most packages depend on.",
+  "files": [
+    "acreconfig.txt",
+    "APLSource/APLTreeUtils.dyalog"
+  ],
+  "main": "APLTreeUtils",
+  "projectSpace": "APLTreeUtils",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aplteam/APLTreeUtils.git"
+  },
+  "keywords": [
+    "utilities",
+    "dyalog",
+    "apl",
+    "library",
+    "dyalog-library",    
+    "apltree"
+  ],
+  "author": "Kai Jaeger",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aplteam/APLTreeUtils/issues"
+  },
+  "homepage": "https://github.com/aplteam/APLTreeUtils#readme"
+}

@@ -105,8 +105,10 @@
           ⎕ML←⎕IO←1
           (⊂∘,⍣(0 1∊⍨≡⍵))⍵
       }
-
+    
+    ⍝ Deprecated from 17.0 onwards: use new primitive ⍳ instead of `Where`!
     Where←{⎕IO←(⎕IO⊃⎕RSI).⎕IO ⋄ ⍵/⍳⍴,⍵}        ⍝ Return indices for Boolean ⍵; depends on ⎕IO in caller's space
+    ⍝
 
       Last←{
       ⍝ `(,¨'3') ←→ Last '1.2.3'`
