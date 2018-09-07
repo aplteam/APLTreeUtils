@@ -1,5 +1,7 @@
 # APLTreeUtils
 
+General utilities included/used by most members of the APLTree library.
+
 
 ## Overview
 
