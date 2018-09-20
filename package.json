@@ -1,9 +1,8 @@
 {
   "name": "apltreeutils",
   "version": "4.2.1",
-  "description": "General utilities most packages depend on.",
+  "description": "General utilities most APLTree packages depend on.",
   "files": [
-    "acreconfig.txt",
     "APLSource/APLTreeUtils.dyalog"
   ],
   "main": "APLTreeUtils",
