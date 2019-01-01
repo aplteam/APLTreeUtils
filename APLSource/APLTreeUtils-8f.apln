@@ -33,23 +33,6 @@
 ⍝ * 4.2.1
 ⍝   * `GoToWebPage` was not clear about "file://" versus "file:///"
 ⍝   * `GoToWebPage` with "file://" or "file:///" did not work from Ride
-⍝ * 4.2.0
-⍝   `GoToWebPage` was not clear about "file://" versus "file:///"    
-⍝ * 4.1.1
-⍝   * Very serious performance issue fixed in `WriteUtf8File` with "append".
-⍝   Bug fixes:
-⍝   * `GoToWebPage` worked on a Mac only when connected to Ride.
-⍝   * Test case 998 crashed on the Mac.
-⍝ * 4.1.0
-⍝   * Now managed by acre 3.
-⍝ * 4.0.2
-⍝   * Documentation improved.
-⍝ * 4.0.1
-⍝   * Bug fix: call to `GetOperatingSystem` was incorrectly addressing `APLTreeUtils` relatively.
-⍝ * 4.0.0
-⍝   * Tidied up: several functions got removed
-⍝   * This version uses 15.0-features. **It's not backwards-compatible!**
-⍝
 ⍝ Kai Jaeger - APL Team Ltd.\\
 ⍝ Homepage: <http://aplwiki.com/APLTreeUtils>
 
