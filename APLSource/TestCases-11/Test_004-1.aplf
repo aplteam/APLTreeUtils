@@ -1,4 +1,4 @@
- R←Test_004(stopFlag batchFlag);fn;html;⎕TRAP;answer;browser;rideFlag
+ R←Test_004(stopFlag batchFlag);fn;html;⎕TRAP;answer;browser;rideFlag;exe;success
 ⍝ Exercise "GoToWebPage"
  R←∆Failed
  ⎕TRAP←(999 'C' '. ⍝ Deliberate error')(0 'N')
@@ -13,26 +13,49 @@
          {}⍞
      :EndIf
 
-     #.APLTreeUtils.GoToWebPage'aplwiki.com'
+     success←#.APLTreeUtils.GoToWebPage'aplwiki.com'
+     →PassesIf success
      :If 0=∆Ask'Do you see http://aplwiki.com in ',browser
          :Return
      :EndIf
-     #.APLTreeUtils.GoToWebPage'httpS://www.linkedin.com/in/kaijaeger'
+     success←#.APLTreeUtils.GoToWebPage'httpS://www.linkedin.com/in/kaijaeger'
+     →PassesIf success
      :If 0=∆Ask'Do you see httpS://www.linkedin.com/in/kaijaeger in ',browser
          :Return
      :EndIf
+
+     :If 'Win'≡#.APLTreeUtils.GetOperatingSystem ⍬
+         exe←'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe'
+         success←exe #.APLTreeUtils.GoToWebPage'httpS://vector.org.uk'
+         →PassesIf success
+         :If 0=∆Ask'Do you see httpS://vector.org.uk in Chrome?'
+             :Return
+         :EndIf
+     :EndIf
+
      fn←(¯4↓#.FilesAndDirs.GetTempFilename''),'.html'
      html←'<h1>Homemade</h1><p>This page was created on the fly...</p>'
      #.APLTreeUtils.WriteUtf8File fn html
-     #.APLTreeUtils.GoToWebPage'file://',fn
+     success←#.APLTreeUtils.GoToWebPage'file://',fn
+     →PassesIf success
      :If 0=∆Ask'Do you see ',fn,' in ',browser
          :Return
      :EndIf
      ⎕DL 0.2
      #.FilesAndDirs.DeleteFile fn
 
+     fn←(¯5↓fn),' with spaces',¯5↑fn
+     #.APLTreeUtils.WriteUtf8File fn html
+     success←#.APLTreeUtils.GoToWebPage'file://',fn
+     →PassesIf success
+     :If 0=∆Ask'Do you see ',fn,' (watch the two spaces!) in ',browser
+         :Return
+     :EndIf
+     #.FilesAndDirs.DeleteFile fn
+
      :If 'Mac'≡#.APLTreeUtils.GetOperatingSystem ⍬
-         'Safari'#.APLTreeUtils.GoToWebPage'aplwiki.com'
+         success←'Safari'#.APLTreeUtils.GoToWebPage'aplwiki.com'
+         →PassesIf success
          :If 0=∆Ask'Do you see http://aplwiki.com in Safari'
              :Return
          :EndIf

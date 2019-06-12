@@ -105,6 +105,7 @@
  ref2.⎕FIX ⎕SRC #.FilesAndDirs
  ref2←⍎'qq'ref.⎕NS''
  ref2.⎕FIX ⎕SRC #.Logger
+ ref2.⎕FIX ⎕SRC #.APLTreeUtils
  'Source'ref.⎕NS''
  ref.Source.⎕FX'r←Foo home' 'myLogger←⎕NEW ##.qq.Logger (,⊂home)' ' r←myLogger.(path ,filename)'
  fn←ref.Source.Foo home
