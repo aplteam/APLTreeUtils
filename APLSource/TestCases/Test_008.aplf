@@ -1,0 +1,46 @@
+ R←Test_008(stopFlag batchFlag);A;io;⎕IO;ml;⎕ML;buffer;⎕TRAP;noOf;result;First
+⍝ Exercise "Uppercase"
+ R←T._Failed
+ ⎕TRAP←(999 'C' '. ⍝ Deliberate error')(0 'N')
+ A←##.APLTreeUtils
+ First←{⎕ML←3 ⋄ ↑⍵}
+
+ :For io :In 0 1
+     ⎕IO←io
+     :For ml :In 0 1 2 3
+         ⎕ML←ml
+
+         →T.FailsIf''≢buffer←A.Uppercase''
+         →T.FailsIf'KAI JAEGER APL SOFTWARE TEAM'≢buffer←A.Uppercase'KAI JAEGER APL Software Team'
+         →T.FailsIf'KAI JAEGER' 'APL SOFTWARE TEAM'≢buffer←A.Uppercase'KAI JAEGER' 'APL Software Team'
+         →T.FailsIf'ÜÄÖßÜÄÖ'≢buffer←A.Uppercase'üäößÜÄÖ'
+         →T.FailsIf'Ü'≢buffer←A.Uppercase'ü'
+         →T.FailsIf(,'Ü')≢buffer←A.Uppercase,'ü'
+         →T.FailsIf'Ü'≢buffer←A.Uppercase'Ü'
+         →T.FailsIf(,'Ü')≢buffer←A.Uppercase,'Ü'
+         →T.FailsIf'A'≢buffer←A.Uppercase'a'
+         →T.FailsIf(,'A')≢buffer←A.Uppercase,'a'
+         →T.FailsIf'∑X²'≢buffer←A.Uppercase'∑x²'
+         →T.FailsIf(2 2⍴'AABB')≢buffer←A.Uppercase 2 2⍴'AaBb'
+         :Trap 11,16 ⍝ Was 16 in 12.1 and earlier but got 11 in 13.0
+             A.Uppercase 1
+             →T.FailsIf 1
+         :EndTrap
+         :Trap 11,16 ⍝ Was 16 in 12.1 and earlier but got 11 in 13.0
+             A.Uppercase 1(2 3)
+             →T.FailsIf 1
+         :EndTrap
+
+         :If 15>First(//)⎕VFI First'.'A.Split(1+⎕IO)⊃'#'⎕WG' APLVersion'
+             →T.FailsIf'' 'HELLO' '' '' 'A' 'B'≢,buffer←A.Uppercase ⍬'HELlo'⍬'' 'a' 'B'
+         :EndIf
+
+         noOf←⌊0.5×⌊⎕WA÷1000
+         buffer←(⊂1000000⍴'apl is fine '),'a',(noOf)⍴⊂'abc'   ⍝ This will cause a WS FULL when converted into a matrix
+         result←A.Uppercase buffer
+         buffer←(⊂1000000⍴'APL IS FINE '),'A',(noOf⍴⊂'ABC')
+         →T.FailsIf buffer≢result
+     :EndFor
+ :EndFor
+
+ R←T._OK

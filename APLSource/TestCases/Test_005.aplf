@@ -1,0 +1,24 @@
+ R←Test_005(stopFlag batchFlag);A;io;⎕IO;ml;⎕ML;buffer;⎕TRAP
+⍝ Exercise "IsChar"
+ A←##.APLTreeUtils
+ R←T._Failed
+ ⎕TRAP←(999 'C' '. ⍝ Deliberate error')(0 'N')
+
+ :For io :In 0 1
+     ⎕IO←io
+     :For ml :In 0 1 2 3
+         ⎕ML←ml
+
+         →T.FailsIf 1≠buffer←A.IsChar''
+         →T.FailsIf 0≠buffer←A.IsChar ⍬
+         →T.FailsIf 1≠buffer←A.IsChar' '
+         →T.FailsIf 0≠buffer←A.IsChar 0
+         →T.FailsIf 1≠buffer←A.IsChar'hello world'
+         →T.FailsIf 0≠buffer←A.IsChar 1 2 3
+         →T.FailsIf 0≠buffer←A.IsChar⊂'hello'
+         →T.FailsIf 0≠buffer←A.IsChar⊂1 2 3 'hello'
+
+     :EndFor
+ :EndFor
+
+ R←T._OK

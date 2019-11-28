@@ -1,0 +1,33 @@
+ R←Test_003(stopFlag batchFlag);io;ml;⎕IO;⎕ML;buffer;A;⎕TRAP;Mix
+⍝ Exercise "FormatDateTime"
+ A←##.APLTreeUtils
+ R←T._Failed
+ ⎕TRAP←(999 'C' '. ⍝ Deliberate error')(0 'N')
+ Mix←{⎕ML←1 ⋄ ↑⍵}
+
+ :For io :In 0 1
+     ⎕IO←io
+     :For ml :In 0 1 2 3
+         ⎕ML←ml
+         →T.FailsIf~∧/(buffer←A.FormatDateTime'')∊⎕D,'- :'
+         →T.FailsIf'2008-12-30 20:20:12'≢buffer←A.FormatDateTime 2008 12 30 20 20 12 999
+         →T.FailsIf'2008-12-30 20:20:12'≢buffer←A.FormatDateTime 2008 12 30 20 20 12
+         →T.FailsIf'2008-12-30 00:00:00'≢buffer←A.FormatDateTime 2008 12 30
+         →T.FailsIf'2008-12-30 20:20:12.999'≢buffer←7 A.FormatDateTime 2008 12 30 20 20 12 999
+         →T.FailsIf'2008-12-30 20:20:12'≢buffer←6 A.FormatDateTime 2008 12 30 20 20 12 999
+         →T.FailsIf'2008-12-30'≢buffer←3 A.FormatDateTime 2008 12 30 20 20 12 999
+         →T.FailsIf'2008-12-30 20:20:12.999'≢buffer←⍬ A.FormatDateTime 2008 12 30 20 20 12 999
+         →T.FailsIf'2008-12-30 20:20:12'≢buffer←⍬ A.FormatDateTime 2008 12 30 20 20 12
+         →T.FailsIf'2008-12-30'≢buffer←⍬ A.FormatDateTime 2008 12 30
+         →T.FailsIf(Mix'2008-12-30' '2008-12-29')≢buffer←⍬ A.FormatDateTime Mix(2008 12 30)(2008 12 29)
+         →T.FailsIf(Mix'2008-12-30 03:04:05' '2008-12-29 10:11:12')≢buffer←⍬ A.FormatDateTime Mix(2008 12 30 3 4 5)(2008 12 29 10 11 12)
+         →T.FailsIf(Mix'2008-12-30 03:04:05' '' '2008-12-29 10:11:12')≢buffer←⍬ A.FormatDateTime Mix(2008 12 30 3 4 5)''(2008 12 29 10 11 12)
+         →T.FailsIf(Mix'2008-12-30 03:04:05' '' '2008-12-29 10:11:12')≢buffer←⍬ A.FormatDateTime Mix(2008 12 30 3 4 5)⍬(2008 12 29 10 11 12)
+         →T.FailsIf(Mix'2008-12-30 03:04:05')≢buffer←⍬ A.FormatDateTime 20081230030405
+         →T.FailsIf(Mix'2008-12-30 03:04:05' '' '2008-12-29 10:11:12')≢buffer←⍬ A.FormatDateTime Mix 20081230030405 ⍬ 20081229101112
+         →T.FailsIf(Mix'2008-12-30 03:04:05')≢buffer←⍬ A.FormatDateTime 1000000×20081230.030405
+         →T.FailsIf(Mix'2008-12-30 03:04:05' '' '2008-12-29 10:11:12')≢buffer←⍬ A.FormatDateTime Mix 1000000×20081230.030405 ⍬ 20081229.101112
+     :EndFor
+ :EndFor
+
+ R←T._OK

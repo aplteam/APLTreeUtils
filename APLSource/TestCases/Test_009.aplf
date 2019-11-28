@@ -1,0 +1,32 @@
+ R←Test_009(stopFlag batchFlag);A;newline;io;⎕IO;ml;⎕ML;buffer;⎕TRAP
+⍝ Exercise "Nest"
+ A←##.APLTreeUtils
+ newline←⎕UCS 13 10
+ R←T._Failed
+ ⎕TRAP←(999 'C' '. ⍝ Deliberate error')(0 'N')
+
+ :For io :In 0 1
+     ⎕IO←io
+     :For ml :In 0 1 2 3
+         ⎕ML←ml
+
+         →T.FailsIf(⊂'')≢buffer←A.Nest''
+         →T.FailsIf(⊂⍬)≢buffer←A.Nest ⍬
+         →T.FailsIf(⊂,' ')≢buffer←A.Nest' '
+         →T.FailsIf(⊂,0)≢buffer←A.Nest 0
+         →T.FailsIf(⊂'hello')≢buffer←A.Nest'hello'
+         →T.FailsIf(⊂1 2 3)≢buffer←A.Nest 1 2 3
+         →T.FailsIf(⊂'')≢buffer←A.Nest⊂''
+         →T.FailsIf(,⊂'')≢buffer←A.Nest,⊂''
+         →T.FailsIf(⊂⊂'')≢buffer←A.Nest⊂⊂''
+         →T.FailsIf(⊂⍬)≢buffer←A.Nest⊂⍬
+         →T.FailsIf(⊂⊂⍬)≢buffer←A.Nest⊂⊂⍬
+         →T.FailsIf('hello'(1 2))≢buffer←A.Nest'hello'(1 2)
+         →T.FailsIf((1 2)'hello')≢buffer←A.Nest(1 2)'hello'
+         →T.FailsIf(⊂'hello'(1 2))≢buffer←A.Nest⊂'hello'(1 2)
+         →T.FailsIf(⊂(1 2)'hello')≢buffer←A.Nest⊂(1 2)'hello'
+
+     :EndFor
+ :EndFor
+
+ R←T._OK

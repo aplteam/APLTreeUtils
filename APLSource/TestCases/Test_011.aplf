@@ -1,0 +1,213 @@
+ R←Test_011(stopFlag batchFlag);A;data;filename;io;ml;⎕ML;⎕IO;buffer;data2;data3;data4;fno;dataX;rc;moreData;⎕TRAP;home;First;newline;newLine
+⍝ Exercise "WriteUtf8File" & "ReadUtf8File"
+ A←##.APLTreeUtils
+ R←T._Failed
+ ⎕TRAP←(999 'C' '. ⍝ Deliberate error')(0 'N')
+ newline←##.FilesAndDirs.GetNewLineCharsFor ⍬
+ First←{⎕ML←3 ⋄ ↑⍵}
+
+⍝ Prepare
+ home←GetTestFilesHome
+ :If ##.FilesAndDirs.Exists home,'TestFiles'
+     {⍵:.}0≠1⊃rc←##.FilesAndDirs.RmDir home,'TestFiles'  ⍝ Huuh?!
+ :EndIf
+ 'Create!'##.FilesAndDirs.CheckPath home,'TestFiles'
+
+ :For io :In 0 1
+     ⎕IO←io
+     :For ml :In 0 1 2 3
+         ⎕ML←ml
+
+⍝ ASCII
+         data←'SingleWord'
+         filename←home,'TestFiles/test00a'
+         A.WriteUtf8File filename data
+         →T.FailsIf data≢buffer←A.ReadUtf8File filename
+         →T.FailsIf data≢buffer←'flat'A.ReadUtf8File filename
+
+         data←'Pure ASCII' 'Really!' '`¬!"£$%^&*()_+=-][}{#'';~@:/.,?><\|' '1234567890' 'qwertyuiop' 'asdfghjkl' 'zxcvbnm' 'QWERTYUIOP' 'ASDFGHJKL' 'ZXCVBNM'
+         filename←home,'TestFiles/test01a'
+         A.WriteUtf8File filename data
+         →T.FailsIf data≢buffer←A.ReadUtf8File filename
+
+         filename←home,'TestFiles/test01b'
+         A.WriteUtf8File filename({⎕IO←0 ⋄ ⊃{⍺,newline,⍵}/⍵}data)
+         →T.FailsIf data≢buffer←A.ReadUtf8File filename
+
+         filename←home,'TestFiles/test01c'
+         A.WriteUtf8File filename({⎕IO←0 ⋄ ⊃{⍺,newline,⍵}/⍵}data)
+         →T.FailsIf data≢buffer←A.ReadUtf8File filename
+
+⍝ ANSI + APL
+         data←'8 bit (ANSI)' 'ÜÖÄßüäö' '⋄¨¯<≤=≥>≠∨∧×÷→←*○⍳↓↑~⍴∊⍵?⍺⌈⌊_∇∆∘''⎕⍎⍕#⌿⍀⍝|⊤⊥∪∩⊃⊂\|⊢⊣' '⍨⍙⍷≢⍪≡⌷⍬⍞⍣⌹!⍲⍟⊖⍉⌽⍋⍒⍫≡'
+         filename←home,'TestFiles/test02a'
+         A.WriteUtf8File filename data
+         →T.FailsIf data≢buffer←A.ReadUtf8File filename
+
+         filename←home,'TestFiles/test02b'
+         A.WriteUtf8File filename({⎕IO←0 ⋄ ⊃{⍺,newline,⍵}/⍵}data)
+         →T.FailsIf data≢buffer←A.ReadUtf8File filename
+
+         filename←home,'TestFiles/test02c'
+         A.WriteUtf8File filename({⎕IO←0 ⋄ ⊃{⍺,newline,⍵}/⍵}data)
+         →T.FailsIf data≢buffer←A.ReadUtf8File filename
+
+⍝ Unicode
+         data←'Unicode' 'גבא' 'Здравствуй мир'
+         filename←home,'TestFiles/test03a'
+         A.WriteUtf8File filename data
+         →T.FailsIf data≢buffer←A.ReadUtf8File filename
+
+         filename←home,'TestFiles/test03b'
+         A.WriteUtf8File filename({⎕IO←0 ⋄ ⊃{⍺,newline,⍵}/⍵}data)
+         →T.FailsIf data≢buffer←A.ReadUtf8File filename
+
+         filename←home,'TestFiles/test03c'
+         A.WriteUtf8File filename({⎕IO←0 ⋄ ⊃{⍺,newline,⍵}/⍵}data)
+         →T.FailsIf data≢buffer←A.ReadUtf8File filename
+
+         filename←home,'TestFiles/test03d'
+         data←('Line 1',(⎕UCS 13 10),'Another line')
+         A.WriteUtf8File filename data
+         →T.FailsIf('Line 1' 'Another line')≢buffer←A.ReadUtf8File filename
+
+⍝ Blanks in  filename
+         data←'Unicode' 'גבא' 'Здравствуй мир'
+         filename←home,'TestFiles/test 04 a'
+         A.WriteUtf8File filename data
+         →T.FailsIf data≢buffer←A.ReadUtf8File filename
+
+⍝ Quotes around filename
+         data←'Unicode' 'גבא' 'Здравствуй мир'
+         filename←home,'TestFiles/"test05a"'
+         A.WriteUtf8File filename data
+         →T.FailsIf data≢buffer←A.ReadUtf8File filename
+
+⍝ Append
+         dataX←'123' '' '44'
+         filename←home,'TestFiles/doesnotexistyet'
+         'append'A.WriteUtf8File filename dataX
+         →T.FailsIf(dataX)≢buffer←A.ReadUtf8File filename
+         ##.FilesAndDirs.DeleteFile filename
+
+         ⍝ Append
+         data2←'123' '' '4'
+         filename←home,'TestFiles/"test05a"'
+         'append'A.WriteUtf8File filename data2
+         →T.FailsIf(,¨data,data2)≢buffer←A.ReadUtf8File filename
+
+         data3←'123kajskxj' 'aaaa'
+         filename←home,'TestFiles/"test05a"'
+         1 A.WriteUtf8File filename data3
+         →T.FailsIf(,¨data,data2,data3)≢buffer←A.ReadUtf8File filename
+
+⍝ Append an empty string
+         filename←home,'TestFiles/"test05a"'
+         buffer←A.ReadUtf8File filename
+         'append'A.WriteUtf8File filename''
+         →T.FailsIf buffer≢A.ReadUtf8File filename
+
+         data4←'99999999999999999'
+         filename←home,'TestFiles/"test05a"'
+         1 A.WriteUtf8File filename(⊂data4)
+         →T.FailsIf(,¨data,data2,(¯1↓data3),(⊂(First,/¯1↑data3)),⊂data4)≢buffer←A.ReadUtf8File filename
+
+⍝ Read as a stream
+         newLine←##.FilesAndDirs.GetNewLineCharsFor ⍬
+         →T.FailsIf((⍴,newLine)↓⊃,/(⊂newLine),¨(,¨data,data2,(¯1↓data3),(⊂(First,/¯1↑data3)),⊂data4))≢buffer←'flat'A.ReadUtf8File filename
+
+⍝ append with mix of simple strings and nested vectors
+         data←'111'
+         filename←home,'TestFiles/"test06a"'
+         A.WriteUtf8File filename data
+
+         data2←'2222'
+         'append'A.WriteUtf8File filename data2
+
+         data3←'33'
+         1 A.WriteUtf8File filename data3
+
+         data4←'444' '' '55555'
+         filename←home,'TestFiles/"test06a"'
+         1 A.WriteUtf8File filename(data4)
+         →T.FailsIf((⊂data,data2,data3),data4)≢buffer←A.ReadUtf8File filename
+
+⍝ Process files with different record separators
+
+         data←'111'
+         filename←home,'TestFiles/"test_sep_1"'
+         A.WriteUtf8File filename data
+         →T.FailsIf data≢A.ReadUtf8File filename
+
+         data←'111' '222'
+         filename←home,'TestFiles/"test_sep_2"'
+         A.WriteUtf8File filename(2↓⊃,/(⊂⎕UCS 13 10),¨data)
+         →T.FailsIf data≢A.ReadUtf8File filename
+
+         data←'111' '222'
+         filename←home,'TestFiles/"test_sep_3"'
+         A.WriteUtf8File filename(1↓⊃,/(⊃⎕UCS 10),¨data)
+         →T.FailsIf data≢A.ReadUtf8File filename
+
+         data←'111' '222'
+         filename←home,'TestFiles/"test_sep_4"'
+         A.WriteUtf8File filename(1↓⊃,/(⊃⎕UCS 13),¨data)
+         →T.FailsIf data≢A.ReadUtf8File filename
+
+⍝ append with a file tie number
+         data←'111'
+         filename←home,'TestFiles/test07a'
+         ##.FilesAndDirs.DeleteFile filename
+         fno←##.FilesAndDirs.CreateFile filename
+         'append'A.WriteUtf8File fno data
+
+         data2←'2222'
+         'append'A.WriteUtf8File fno data2
+
+         data3←'33'
+         1 A.WriteUtf8File fno data3
+
+         data4←'444' '' '55555'
+         filename←home,'TestFiles/"test06a"'
+         1 A.WriteUtf8File fno(data4)
+         ⎕NUNTIE fno
+         →T.FailsIf((⊂data,data2,data3),data4)≢buffer←A.ReadUtf8File filename
+
+⍝ Perform an exclusive tie
+         filename←home,'TestFiles/totallynew'
+         :Trap 0                    ⍝ Delete any leftovers
+             ##.FilesAndDirs.DeleteFile filename
+         :EndTrap
+         fno←##.FilesAndDirs.CreateFile filename     ⍝ Create it from scratch
+         ⎕NUNTIE fno                ⍝ Untie it
+         fno←(##.FilesAndDirs.NormalizePath filename)⎕NTIE 0 34    ⍝ Ask for read & write access but grant only read to subsequent guys
+
+         A.WriteUtf8File fno(data←'Hello world')
+         →T.FailsIf data≢A.ReadUtf8File fno
+         moreData←'Hello Universe'
+         'append'A.WriteUtf8File fno moreData
+         →T.FailsIf(data,moreData)≢A.ReadUtf8File fno
+         ⎕NUNTIE fno
+
+⍝ Invalid data
+         :Trap 11
+             'appent'A.WriteUtf8File filename(2 3⍴'a')
+             →T.FailsIf 1
+         :Else
+             →T.FailsIf'Invalid data: must not be a matrix'≢⎕IO⊃⎕DM
+         :EndTrap
+
+⍝ Invalid append
+         :Trap 11
+             'appent'A.WriteUtf8File filename data3
+             →T.FailsIf 1
+         :Else
+             →T.FailsIf'Invalid right argument'≢⎕IO⊃⎕DM
+         :EndTrap
+
+     :EndFor
+ :EndFor
+
+⍝ Tidy up
+ {}##.FilesAndDirs.RmDir home,'TestFiles'
+ R←T._OK

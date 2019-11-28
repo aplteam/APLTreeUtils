@@ -1,0 +1,26 @@
+ R←Test_019(stopFlag batchFlag);A;IOs;MLs;⎕TRAP;Mix
+⍝ Exercise "dmb"
+ R←T._Failed
+ ⎕TRAP←(999 'C' '. ⍝ Deliberate error')(0 'N')
+
+ A←##.APLTreeUtils
+ Mix←{⎕ML←1 ⋄ ↑⍵}
+ IOs←0 1
+ MLs←0 1 2 3
+
+ :For ⎕IO :In IOs
+     :For ⎕ML :In MLs
+
+         →T.FailsIf~0∊⍴A.dmb' '
+         →T.FailsIf''≢A.dmb''
+         →T.FailsIf'A'≢A.dmb'A'
+         →T.FailsIf'APL'≢A.dmb'APL'
+         →T.FailsIf'APL is great'≢A.dmb' APL  is great    '
+         →T.FailsIf'APL' 'APL is great'≢A.dmb'APL' '   APL   is great '
+         →T.FailsIf(Mix'APL' 'APL is great')≢A.dmb Mix'APL' '   APL   is great '
+
+     :EndFor
+ :EndFor
+
+
+ R←T._OK

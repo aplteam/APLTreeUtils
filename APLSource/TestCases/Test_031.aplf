@@ -1,0 +1,32 @@
+ R←Test_031(stopFlag batchFlag);A;⎕TRAP;home;filename;fno;io;ml;⎕ML;data;buffer;rc
+⍝ Exercise "WriteUtf8File" & "ReadUtf8File" with a tie number. See also Test_030.
+ A←##.APLTreeUtils
+ R←T._Failed
+ ⎕TRAP←(999 'C' '. ⍝ Deliberate error')(0 'N')
+
+⍝ Prepare
+ home←GetTestFilesHome
+ :If ##.FilesAndDirs.Exists home,'TestFiles'
+     ⍎(0≠1⊃rc←##.FilesAndDirs.RemoveDir home,'TestFiles')/'.'  ⍝ Huuh?!
+ :EndIf
+ 'Create!'##.FilesAndDirs.CheckPath home,'TestFiles'
+ filename←home,'TestFiles/test00a'
+ fno←##.FilesAndDirs.CreateFile filename
+
+ :For io :In 0 1
+     ⎕IO←io
+     :For ml :In 0 1 2 3
+         ⎕ML←ml
+         data←'SingleWord'
+         A.WriteUtf8File fno data
+         →T.GoToTidyUp data≢buffer←A.ReadUtf8File fno
+         →T.GoToTidyUp data≢buffer←'flat'A.ReadUtf8File fno
+     :EndFor
+ :EndFor
+ R←T._OK
+
+∆TidyUp:
+ ⎕NUNTIE fno
+ :Trap 0
+     {}##.FilesAndDirs.RmDir home,'TestFiles'
+ :EndTrap

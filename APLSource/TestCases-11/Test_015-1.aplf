@@ -1,9 +1,0 @@
- R←Test_015(stopFlag batchFlag);A;⎕TRAP
-⍝ Exercise "IsUnicode"
- R←∆Failed
- ⎕TRAP←(999 'C' '. ⍝ Deliberate error')(0 'N')
-
- A←#.APLTreeUtils
- →FailsIf A.IsUnicode≢80=⎕DR' '
-
- R←∆OK
