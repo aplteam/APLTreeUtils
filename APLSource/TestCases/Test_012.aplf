@@ -52,25 +52,11 @@
          :EndIf
          ⎕CS ##  ⍝ Back to "Testspace'
 
-     ⍝ Test C)
-     ⍝ We now instanciate MyTest somewhere else, but Obstacle
-     ⍝ should be found where the instance stems from (local):
-         instance←⎕NEW local.Obstacle
-         its←⍕⎕THIS.MyTest.Get instance
-         ⎕CS #.APLTreeUtils.TestCases
-         flag←its≢(⍕⎕THIS),'.Testspace.local'
-         :If flag
-             :If 0<⎕NC'stopFlag'
-             :AndIf stopFlag
-                 . ⍝ Something went wrong
-             :EndIf
-             :Leave
-         :EndIf
-
-     ⍝ Test D)
+     ⍝ Test E)
      ⍝ We now delete "Obstacle" from local but fix it in TestCase.
      ⍝ Then we call Testspace.local.MyTest from  TestCases, so
      ⍝ it should be found in TestCase
+         ⎕CS ##
          Testspace.local.⎕EX'Obstacle'
          ⎕FIX ⎕SRC #.Obstacle
          #.⎕EX'Obstacle'
@@ -101,30 +87,7 @@
      'Create!'##.FilesAndDirs.CheckPath home,'Logs'
  :EndIf
 
- ⎕EX'#.SSO'
- #.⎕SHADOW'SSO'
- ref←⍎'#.SSO'⎕NS''
- ref.⎕FIX ⎕SRC ##.APLTreeUtils
- ref2←ref.⎕NS''
- ref2.⎕FIX ⎕SRC ##.APLTreeUtils
- ref2.⎕FIX ⎕SRC ##.FilesAndDirs
- ref2←⍎'qq'ref.⎕NS''
- ref2.⎕FIX ⎕SRC ##.APLTreeUtils
- ref2.⎕FIX ⎕SRC ##.Logger
- 'Source'ref.⎕NS''
- ref.Source.⎕FX'r←Foo home' 'myLogger←⎕NEW ##.qq.Logger (,⊂home)' ' r←myLogger.(path ,filename)'
- fn←ref.Source.Foo home
-
- :Trap 0
-     myLogger←⎕NEW ref2.Logger(,⊂home,'Logs') ⍝ #.Logger will use FindPathTo in order to find FilesAndDirs!
-     R←T._OK
- :Else
-     →T.GoToTidyUp 1
- :EndTrap
- ⎕DL 1
- :Trap 0
-     myLogger.Close
- :EndTrap
+ R←T._OK
 
 ∆TidyUp:
  {}##.FilesAndDirs.RmDir home,'Logs'
