@@ -1,13 +1,11 @@
 :Namespace APLTreeUtils
 
-⍝ *** Version 5.0.0 ⋄ 2020-03-03 ***
+⍝ *** Version 6.0.0 ⋄ 2020-03-21 ***
 ⍝ ## Overview
 ⍝ Note that `APLTreeUtils` does not work with the Classic edition - it requires Unicode.\\
 ⍝ ## Version History
-⍝ * 5.0.0
-⍝   * `FindPath` redefined, see there.
-⍝ * 4.3.0
-⍝   * Method `ToNum` introduced
+⍝ * 6.0.0
+⍝   * Renamed: it's now APLTreeUtils.apln rather than APLTreeUtils.dyalog
 ⍝ Kai Jaeger - APL Team Ltd.\\
 ⍝ Homepage: <https://github.com/aplteam/APLTreeUtils/>
 
