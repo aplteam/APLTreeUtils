@@ -1,9 +1,11 @@
 :Namespace APLTreeUtils
 
-⍝ *** Version 6.0.0 ⋄ 2020-03-21 ***
+⍝ *** Version 6.0.1 ⋄ 2020-05-29 ***
 ⍝ ## Overview
 ⍝ Note that `APLTreeUtils` does not work with the Classic edition - it requires Unicode.\\
 ⍝ ## Version History
+⍝ * 6.0.1
+⍝   `WriteUtf8File` has been made more robust in case a race condition prevents it from accessing a file
 ⍝ * 6.0.0
 ⍝   * Renamed: it's now APLTreeUtils.apln rather than APLTreeUtils.dyalog
 ⍝ Kai Jaeger - APL Team Ltd.\\
@@ -214,7 +216,7 @@
       max←5
       fno←0⍴i←size←flag←0
       :Repeat
-          ⎕DL 1×i>0
+          ⎕DL i×0.1
           :If wasOpenFlag←0=1↑0⍴fileIdentifier
               fno←fileIdentifier
               size←⎕NSIZE fno
@@ -229,11 +231,14 @@
               :Case 22
                   fno←(filename~'"')⎕NCREATE 0
                   flag←1
+              :Case 19
+                  ⍝ Try again
               :Else
                   ('Could not open file ',filename)⎕SIGNAL ⎕EN
               :EndTrap
           :EndIf
       :Until flag∨max<i←i+1
+      ⎕DMX.EM ⎕SIGNAL ⎕EN/⍨0=≢fno
       :If append
       :AndIf (0<size)∧~simpleFlag
           data,⍨←newline

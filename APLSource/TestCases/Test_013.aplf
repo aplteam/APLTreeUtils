@@ -5,6 +5,7 @@
  ⎕TRAP←(999 'C' '. ⍝ Deliberate error')(0 'N')
  home←GetTestFilesHome
  filename←home,'tiedFile'
+ ##.APLTreeUtils.WriteUtf8File filename'test file'
 
  :If 'Win'≡##.APLTreeUtils.GetOperatingSystem ⍬
      cs←##.Execute.DefaultParms
