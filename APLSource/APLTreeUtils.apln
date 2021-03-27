@@ -1,9 +1,11 @@
 :Namespace APLTreeUtils
 
-⍝ *** Version 6.0.1 ⋄ 2020-05-29 ***
+⍝ *** Version 6.1.0 ⋄ 2021-02-18 ***
 ⍝ ## Overview
 ⍝ Note that `APLTreeUtils` does not work with the Classic edition - it requires Unicode.\\
 ⍝ ## Version History
+⍝ * 6.1.0
+⍝   `Uppercase` and `Lowercase` now prefer ⎕C over 819⌶ and can therefore accept all arrays under 18.0+
 ⍝ * 6.0.1
 ⍝   `WriteUtf8File` has been made more robust in case a race condition prevents it from accessing a file
 ⍝ * 6.0.0
@@ -11,18 +13,27 @@
 ⍝ Kai Jaeger - APL Team Ltd.\\
 ⍝ Homepage: <https://github.com/aplteam/APLTreeUtils/>
 
-    ∇ array←Uppercase array
-    ⍝ Fast uppercasing that excepts scalars, vectors and matrices as well as vectors and
-    ⍝ matrices of text vectors.\\
-    ⍝ Note that `Uppercase` converts lower case chars well beyond the ANSII character set.
-      array←1(819⌶)array
+    ∇ array←Uppercase array;⎕IO;⎕ML
+    ⍝ Fast uppercasing that accepts scalars, vectors and matrices as well as vectors and
+    ⍝ matrices of text vectors. Accepts all arrays under 18.0+.\\
+    ⍝ Note that `Uppercase` converts lower case chars well beyond the ANSI character set.
+      ⎕ML←⎕IO←1
+      :If 18≤2 1⊃'.'⎕VFI 2⊃'#'⎕WG'APLVersion'
+          array←1 ⎕C array
+      :Else
+          array←1(819⌶)array
+      :EndIf
     ∇
 
-    ∇ array←Lowercase array
-    ⍝ Fast lowercasing that excepts scalars, vectors and matrices as well as vectors and
-    ⍝ matrices of text vectors.\\
-    ⍝ Note that `Lowercase` converts upper case chars well beyond the ANSII character set.
-      array←0(819⌶)array
+    ∇ array←Lowercase array;⎕IO;⎕ML
+    ⍝ Fast lowercasing that accepts scalars, vectors and matrices as well as vectors and
+    ⍝ matrices of text vectors. Accepts all arrays under 18.0+.\\
+    ⍝ Note that `Lowercase` converts upper case chars well beyond the ANSI character set.
+      :If 18≤2 1⊃'.'⎕VFI 2⊃'#'⎕WG'APLVersion'
+          array←¯1 ⎕C array
+      :Else
+          array←0(819⌶)array
+      :EndIf
     ∇
 
     IsChar←{0 2∊⍨10|⎕dr ⍵}
