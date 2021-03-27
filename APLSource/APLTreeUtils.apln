@@ -1,6 +1,5 @@
 :Namespace APLTreeUtils
-
-⍝ *** Version 6.1.0 ⋄ 2021-02-18 ***
+⍝ *** Version 6.1.0 ⋄ 2021-03-27 ***
 ⍝ ## Overview
 ⍝ Note that `APLTreeUtils` does not work with the Classic edition - it requires Unicode.\\
 ⍝ ## Version History
@@ -29,6 +28,7 @@
     ⍝ Fast lowercasing that accepts scalars, vectors and matrices as well as vectors and
     ⍝ matrices of text vectors. Accepts all arrays under 18.0+.\\
     ⍝ Note that `Lowercase` converts upper case chars well beyond the ANSI character set.
+      ⎕ML←⎕IO←1
       :If 18≤2 1⊃'.'⎕VFI 2⊃'#'⎕WG'APLVersion'
           array←¯1 ⎕C array
       :Else

@@ -7,7 +7,7 @@ General utilities included/used by most members of the APLTree library.
 
 **Note:** `APLTreeUtils` is now outdated. The latest versions of the APLTree library will, if they need/use anything from `APLTreeUtils` at all, call methods in the class `APLTreeUtils2` rather then `:Include`ing `APLTreeUtils`; see there for details.
 
-However! `APLTreeUtils2` requires at least version 18.0 of Dyalog. If you need to deal with an older version than 18.0 for any reason then you must not use any of the incompatible versions of the members of the APLTree project. Keep that in mind!
+However! `APLTreeUtils2` requires at least version 18.0 of Dyalog, and it needs [Tatin ](https://tatin.dev) because it's a package. If you need to deal with an older version than 18.0 for any reason then you must not use any of the incompatible versions of the members of the APLTree project. Keep that in mind!
 
 ----
 
