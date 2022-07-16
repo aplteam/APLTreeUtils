@@ -1,5 +1,11 @@
 # APLTreeUtils
 
+_This project is **retired**_
+
+See https://github.com/aplteam/APLTreeUtils2 instead
+
+---------------
+
 General utilities included/used by most members of the APLTree library.
 
 
